@@ -1,27 +1,9 @@
 import { Document, Schema } from "mongoose";
+import {Dossier} from "./entities/dossier.entity";
 
-export interface IDossier{
-    dossierNumber: string,
-    fullName: string,
-    phone: string,
-    pathologie: string,
-    address: string,
-    electro: string,
-    diagnostic: string,
-    comment: string,
-    gender: string,
-    race: string,
-    antecedant: [string],
-    implantationOlder: string,
-    fibrilationLoad: string,
-    age: string,
-    isActive: boolean,
-    insuffisanceCardiaque: string
+export type DossierDocument = Dossier & Document
 
-}
-export type DossierDocument = IDossier & Document
-
-export const DossierSchema = new Schema<IDossier>({
+export const DossierSchema = new Schema<Dossier>({
     dossierNumber: String,
     fullName: String,
     phone: String,
@@ -40,6 +22,12 @@ export const DossierSchema = new Schema<IDossier>({
     fibrilationLoad: String,
     age: String,
     insuffisanceCardiaque: String,
+    tach_arter: {
+        type: String,
+        default: "NON"
+    },
+    tach_arter_value:String,
+    chads_vasc:String,
     isActive: {
         type: Boolean,
         default: true

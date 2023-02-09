@@ -23,23 +23,6 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { Document, Schema } from "mongoose";
-export interface IDossier {
-    dossierNumber: string;
-    fullName: string;
-    phone: string;
-    pathologie: string;
-    address: string;
-    electro: string;
-    diagnostic: string;
-    comment: string;
-    gender: string;
-    race: string;
-    antecedant: [string];
-    implantationOlder: string;
-    fibrilationLoad: string;
-    age: string;
-    isActive: boolean;
-    insuffisanceCardiaque: string;
-}
-export type DossierDocument = IDossier & Document;
-export declare const DossierSchema: Schema<IDossier, import("mongoose").Model<IDossier, any, any, any, any>, {}, {}, {}, {}, "type", IDossier>;
+import { Dossier } from "./entities/dossier.entity";
+export type DossierDocument = Dossier & Document;
+export declare const DossierSchema: Schema<Dossier, import("mongoose").Model<Dossier, any, any, any, any>, {}, {}, {}, {}, "type", Dossier>;

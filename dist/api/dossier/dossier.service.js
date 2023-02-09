@@ -25,6 +25,9 @@ let DossierService = class DossierService {
         newDossier.isActive = true;
         return await newDossier.save();
     }
+    async update(id, updateDossierDto) {
+        return this.dossierModel.findByIdAndUpdate(id, updateDossierDto);
+    }
     async findAll() {
         return this.dossierModel.find({ isActive: true }).exec();
     }
@@ -37,14 +40,11 @@ let DossierService = class DossierService {
         let total = countFibrillation + countNotFibrillation;
         return { total: total, fibrillation: countFibrillation, notFibrillation: countNotFibrillation };
     }
-    findOne(id) {
-        return `This action returns a #${id} dossier`;
-    }
-    update(id, updateDossierDto) {
-        return `This action updates a #${id} dossier`;
+    async findOne(id) {
+        return this.dossierModel.findOne({ _id: id });
     }
     remove(id) {
-        return `This action removes a #${id} dossier`;
+        return this.dossierModel.findByIdAndRemove(id);
     }
 };
 DossierService = __decorate([

@@ -21,6 +21,12 @@ exports.DossierSchema = new mongoose_1.Schema({
     fibrilationLoad: String,
     age: String,
     insuffisanceCardiaque: String,
+    tach_arter: {
+        type: String,
+        default: "NON"
+    },
+    tach_arter_value: String,
+    chads_vasc: String,
     isActive: {
         type: Boolean,
         default: true

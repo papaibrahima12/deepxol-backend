@@ -20,6 +20,9 @@ export class DossierService {
       newDossier.isActive = true;
       return await newDossier.save();
   }
+  async update(id: string, updateDossierDto: UpdateDossierDto):Promise<DossierDocument> {
+    return this.dossierModel.findByIdAndUpdate(id,updateDossierDto)
+  }
 
   async findAll(): Promise<DossierDocument[]> {
     return this.dossierModel.find({isActive: true}).exec()
@@ -35,16 +38,12 @@ export class DossierService {
       return { total: total, fibrillation: countFibrillation, notFibrillation: countNotFibrillation }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} dossier`;
-  }
-
-  update(id: number, updateDossierDto: UpdateDossierDto) {
-    return `This action updates a #${id} dossier`;
+  async findOne(id: string) {
+    return this.dossierModel.findOne({_id: id});
   }
 
   remove(id: number) {
-    return `This action removes a #${id} dossier`;
+    return this.dossierModel.findByIdAndRemove(id);
   }
 
   

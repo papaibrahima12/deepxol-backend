@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 // mongodb+srv://falilou:FmaYFsXYhVelD1GK@clusterird.orpdhel.mongodb.net/deepxol?retryWrites=true&w=majority
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017'),
+    MongooseModule.forRoot('mongodb://localhost:27017/'),
     DossierModule
   ],
   controllers: [AppController],

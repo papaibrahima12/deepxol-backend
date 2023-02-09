@@ -15,14 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DossierController = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
-const file_service_1 = require("../../shared/services/file.service");
 const dossier_service_1 = require("./dossier.service");
 const update_dossier_dto_1 = require("./dto/update-dossier.dto");
 const multer_1 = require("multer");
 let DossierController = class DossierController {
-    constructor(dossierService, fileUpload) {
+    constructor(dossierService) {
         this.dossierService = dossierService;
-        this.fileUpload = fileUpload;
     }
     async create(payload, res, electro) {
         try {
@@ -34,10 +32,9 @@ let DossierController = class DossierController {
             }
             else {
                 const today = new Date();
-                const random = Math.floor(Math.random() * (99999 - 0)) + 0;
+                const random = Math.floor(Math.random() * (99999));
                 const year = today.getFullYear();
-                let dossierNumber = 'D-' + year + '-' + random;
-                payload.dossierNumber = dossierNumber;
+                payload.dossierNumber = 'D-' + year + '-' + random;
                 payload.electro = 'default_image.jpeg';
             }
             const dossier = await this.dossierService.create(payload);
@@ -55,10 +52,10 @@ let DossierController = class DossierController {
         return res.status(common_1.HttpStatus.CREATED).json(payload);
     }
     findOne(id) {
-        return this.dossierService.findOne(+id);
+        return this.dossierService.findOne(id);
     }
     update(id, updateDossierDto) {
-        return this.dossierService.update(+id, updateDossierDto);
+        return this.dossierService.update(id, updateDossierDto);
     }
     remove(id) {
         return this.dossierService.remove(+id);
@@ -71,7 +68,7 @@ __decorate([
             destination: './files/electrocardiogrammes',
             filename: (req, electro, cb) => {
                 const today = new Date();
-                const random = Math.floor(Math.random() * (99999 - 0)) + 0;
+                const random = Math.floor(Math.random() * (99999));
                 const year = today.getFullYear();
                 let dossierNumber = 'D-' + year + '-' + random;
                 const fileNameSplit = electro.originalname.split(".");
@@ -109,7 +106,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], DossierController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -125,8 +122,7 @@ __decorate([
 ], DossierController.prototype, "remove", null);
 DossierController = __decorate([
     (0, common_1.Controller)('api/dossier'),
-    __metadata("design:paramtypes", [dossier_service_1.DossierService,
-        file_service_1.FileUploadService])
+    __metadata("design:paramtypes", [dossier_service_1.DossierService])
 ], DossierController);
 exports.DossierController = DossierController;
 function getRndInteger(arg0, arg1) {
