@@ -28,14 +28,18 @@ let DossierController = class DossierController {
                 let { originalname } = electro;
                 payload.electro = originalname;
                 let fileNameSplit = originalname.split(".");
-                payload.dossierNumber = fileNameSplit[0];
+                if (payload.diagnostic == "OUI") {
+                    payload.dossierNumber = '1-' + fileNameSplit[0];
+                }
+                else
+                    payload.dossierNumber = '0-' + fileNameSplit[0];
             }
             else {
                 const today = new Date();
                 const random = Math.floor(Math.random() * (99999));
                 const year = today.getFullYear();
                 payload.dossierNumber = 'D-' + year + '-' + random;
-                payload.electro = 'default_image.jpeg';
+                payload.electro = 'default_file.xml';
             }
             const dossier = await this.dossierService.create(payload);
             return res.status(common_1.HttpStatus.CREATED).json(dossier);
@@ -54,8 +58,11 @@ let DossierController = class DossierController {
     findOne(id) {
         return this.dossierService.findOne(id);
     }
-    update(id, updateDossierDto) {
-        return this.dossierService.update(id, updateDossierDto);
+    findDossier(number) {
+        return this.dossierService.findDossierNumber(number);
+    }
+    async update(id, updateDossierDto) {
+        return await this.dossierService.update(id, updateDossierDto);
     }
     remove(id) {
         return this.dossierService.remove(+id);
@@ -66,7 +73,7 @@ __decorate([
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('electro', {
         storage: (0, multer_1.diskStorage)({
             destination: './files/electrocardiogrammes',
-            filename: (req, electro, cb) => {
+            filename: (_req, electro, cb) => {
                 const today = new Date();
                 const random = Math.floor(Math.random() * (99999));
                 const year = today.getFullYear();
@@ -106,12 +113,19 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], DossierController.prototype, "findOne", null);
 __decorate([
+    (0, common_1.Get)('number/:number'),
+    __param(0, (0, common_1.Param)('number')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], DossierController.prototype, "findDossier", null);
+__decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_dossier_dto_1.UpdateDossierDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], DossierController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),

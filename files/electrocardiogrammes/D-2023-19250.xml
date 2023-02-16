@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE compagnie [
+<!ENTITY % administration "Jeanne Perron" >
+<!ENTITY administration "Jean Boudin">
+<!ELEMENT compagnie (president,comptable,adjoint)*>
+<!ELEMENT president (#PCDATA)>
+<!ELEMENT comptable (#PCDATA)>
+<!ELEMENT adjoint (#PCDATA)> 
+]> 
+<compagnie>
+<president>&administration;</president>
+<comptable>&administration;</comptable>
+<adjoint>Marion Lepage</adjoint>
+</compagnie>

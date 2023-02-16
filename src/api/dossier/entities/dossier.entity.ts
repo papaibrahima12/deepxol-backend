@@ -5,6 +5,7 @@ export class Dossier {
     pathologie: string;
     address: string;
     electro: string;
+    // electro_xml:string;
     diagnostic: string;
     comment: string;
     gender: string;

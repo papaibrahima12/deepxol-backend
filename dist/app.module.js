@@ -12,15 +12,19 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const dossier_module_1 = require("./api/dossier/dossier.module");
 const mongoose_1 = require("@nestjs/mongoose");
+const auth_module_1 = require("./auth/auth.module");
+const users_module_1 = require("./users/users.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/'),
-            dossier_module_1.DossierModule
+            mongoose_1.MongooseModule.forRoot('mongodb+srv://pisow:deepxolUcadSn@deepxol-database.fm2sitd.mongodb.net/?retryWrites=true&w=majority'),
+            dossier_module_1.DossierModule,
+            auth_module_1.AuthModule,
+            users_module_1.UserModule
         ],
-        controllers: [app_controller_1.AppController],
+        controllers: [app_controller_1.AppController,],
         providers: [app_service_1.AppService],
     })
 ], AppModule);

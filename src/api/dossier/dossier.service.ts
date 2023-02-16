@@ -42,9 +42,11 @@ export class DossierService {
     return this.dossierModel.findOne({_id: id});
   }
 
+  async findDossierNumber(number: string) {
+    return this.dossierModel.findOne({dossierNumber: number});
+  }
+
   remove(id: number) {
     return this.dossierModel.findByIdAndRemove(id);
   }
-
-  
 }

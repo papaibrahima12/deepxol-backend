@@ -33,5 +33,7 @@ export const DossierSchema = new Schema<Dossier>({
         default: true
     }
 },
-{ timestamps: true },
+    {
+    timestamps: true },
 )
+

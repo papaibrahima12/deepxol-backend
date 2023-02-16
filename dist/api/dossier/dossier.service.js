@@ -43,6 +43,9 @@ let DossierService = class DossierService {
     async findOne(id) {
         return this.dossierModel.findOne({ _id: id });
     }
+    async findDossierNumber(number) {
+        return this.dossierModel.findOne({ dossierNumber: number });
+    }
     remove(id) {
         return this.dossierModel.findByIdAndRemove(id);
     }

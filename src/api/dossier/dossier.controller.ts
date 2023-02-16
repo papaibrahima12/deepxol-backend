@@ -4,17 +4,14 @@
 import {
   Body,
   Controller,
-  Delete,
-  Get,
+  Delete, Get,
   HttpException,
   HttpStatus,
-  Param,
-  Post, Put,
+  Param, Post, Put,
   Res,
-  UploadedFile,
-  UseInterceptors
+  UploadedFile, UseInterceptors
 } from '@nestjs/common';
-import {FileInterceptor} from '@nestjs/platform-express';
+import {FileInterceptor, FilesInterceptor} from '@nestjs/platform-express';
 import {DossierService} from './dossier.service';
 import {UpdateDossierDto} from './dto/update-dossier.dto';
 import {diskStorage} from 'multer'
@@ -27,14 +24,13 @@ export class DossierController {
     //     const random = Math.floor(Math.random() * (99999 - 0) ) + 0;
     //     const year = today.getFullYear();
     //     let dossierNumber = 'D-'+year+'-'+random
-    
+
   @Post()
   @UseInterceptors(FileInterceptor('electro', {
     storage: diskStorage({
       destination: './files/electrocardiogrammes',
-      filename: (req, electro, cb ) => {
+      filename: (_req, electro, cb ) => {
         const today = new Date();
-        // const diagNumber =
         const random = Math.floor(Math.random() * (99999));
         const year = today.getFullYear();
         let dossierNumber = 'D-'+year+'-'+random
@@ -48,22 +44,25 @@ export class DossierController {
   async create(@Body() payload: any, @Res() res, @UploadedFile() electro) {
     try {
       if (electro) {
-        let { originalname } = electro;
-        payload.electro = originalname;
-        let fileNameSplit = originalname.split(".")
-        payload.dossierNumber = fileNameSplit[0]
+          let { originalname } = electro;
+          payload.electro = originalname;
+          let fileNameSplit = originalname.split(".")
+          if(payload.diagnostic == "OUI"){
+            payload.dossierNumber = '1-'+fileNameSplit[0]
+          }else
+            payload.dossierNumber = '0-'+ fileNameSplit[0]
       } else {
         const today = new Date();
         const random = Math.floor(Math.random() * (99999));
         const year = today.getFullYear();
         payload.dossierNumber = 'D-' + year + '-' + random
-        payload.electro = 'default_image.jpeg';
+        payload.electro = 'default_file.xml';
       }
       const dossier = await this.dossierService.create(payload);
       return res.status(HttpStatus.CREATED).json(dossier);
     } catch (error) {
       throw new HttpException(error.response, error.status);
-    }    
+    }
   }
 
   @Get()
@@ -80,6 +79,11 @@ export class DossierController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.dossierService.findOne(id);
+  }
+
+  @Get('number/:number')
+  findDossier(@Param('number') number: string) {
+    return this.dossierService.findDossierNumber(number);
   }
 
   @Put(':id')

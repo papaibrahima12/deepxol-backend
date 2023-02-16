@@ -25,4 +25,4 @@
 import { Document, Schema } from "mongoose";
 import { Dossier } from "./entities/dossier.entity";
 export type DossierDocument = Dossier & Document;
-export declare const DossierSchema: Schema<Dossier, import("mongoose").Model<Dossier, any, any, any, any>, {}, {}, {}, {}, "type", Dossier>;
+export declare const DossierSchema: Schema<Dossier, import("mongoose").Model<Dossier, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Dossier>;

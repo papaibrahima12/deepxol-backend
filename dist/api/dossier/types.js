@@ -31,5 +31,7 @@ exports.DossierSchema = new mongoose_1.Schema({
         type: Boolean,
         default: true
     }
-}, { timestamps: true });
+}, {
+    timestamps: true
+});
 //# sourceMappingURL=types.js.map

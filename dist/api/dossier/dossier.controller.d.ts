@@ -34,6 +34,9 @@ export declare class DossierController {
     findOne(id: string): Promise<import("./entities/dossier.entity").Dossier & import("mongoose").Document<any, any, any> & {
         _id: import("mongoose").Types.ObjectId;
     }>;
+    findDossier(number: string): Promise<import("./entities/dossier.entity").Dossier & import("mongoose").Document<any, any, any> & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
     update(id: string, updateDossierDto: UpdateDossierDto): Promise<import("./types").DossierDocument>;
     remove(id: string): import("mongoose").Query<import("./entities/dossier.entity").Dossier & import("mongoose").Document<any, any, any> & {
         _id: import("mongoose").Types.ObjectId;
