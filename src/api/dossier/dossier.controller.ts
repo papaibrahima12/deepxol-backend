@@ -15,6 +15,7 @@ import {FileInterceptor, FilesInterceptor} from '@nestjs/platform-express';
 import {DossierService} from './dossier.service';
 import {UpdateDossierDto} from './dto/update-dossier.dto';
 import {diskStorage} from 'multer'
+import {Dossier} from "./entities/dossier.entity";
 
 @Controller('api/dossier')
 export class DossierController {
@@ -87,8 +88,8 @@ export class DossierController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateDossierDto: UpdateDossierDto) {
-    return await this.dossierService.update(id, updateDossierDto);
+  async update(@Param('id') id:string, @Body() dossier: Dossier) {
+    return await this.dossierService.update(id,dossier);
   }
 
   @Delete(':id')

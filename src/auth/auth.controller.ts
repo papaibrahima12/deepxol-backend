@@ -3,12 +3,12 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import {AccessTokenGuard} from "../common/guards/accesToken.guard";
 
-@Controller()
+@Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) { }
 
     @UseGuards(AuthGuard('local'))
-    @Post('auth/login')
+    @Post('login')
     async login(@Request() req) {
         return this.authService.login(req.user);
     }
