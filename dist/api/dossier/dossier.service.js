@@ -26,7 +26,12 @@ let DossierService = class DossierService {
         return await newDossier.save();
     }
     async update(id, updateDossierDto) {
-        return this.dossierModel.findByIdAndUpdate(id, updateDossierDto);
+        const existingStudent = await this.dossierModel.findByIdAndUpdate(id, updateDossierDto, { new: true });
+        console.log(existingStudent);
+        if (!existingStudent) {
+            throw new common_1.NotFoundException(`Student #${id} not found`);
+        }
+        return existingStudent;
     }
     async findAll() {
         return this.dossierModel.find({ isActive: true }).exec();
@@ -41,13 +46,21 @@ let DossierService = class DossierService {
         return { total: total, fibrillation: countFibrillation, notFibrillation: countNotFibrillation };
     }
     async findOne(id) {
-        return this.dossierModel.findOne({ _id: id });
+        const existingStudent = await this.dossierModel.findById(id).exec();
+        if (!existingStudent) {
+            throw new common_1.NotFoundException(`Student #${id} not found`);
+        }
+        return existingStudent;
     }
     async findDossierNumber(number) {
         return this.dossierModel.findOne({ dossierNumber: number });
     }
-    remove(id) {
-        return this.dossierModel.findByIdAndRemove(id);
+    async remove(id) {
+        const deletedStudent = this.dossierModel.findByIdAndRemove(id);
+        if (!deletedStudent) {
+            throw new common_1.NotFoundException(`Student #${id} not found`);
+        }
+        return deletedStudent;
     }
 };
 DossierService = __decorate([

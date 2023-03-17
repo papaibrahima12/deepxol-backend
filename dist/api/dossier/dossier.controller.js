@@ -16,8 +16,8 @@ exports.DossierController = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const dossier_service_1 = require("./dossier.service");
-const update_dossier_dto_1 = require("./dto/update-dossier.dto");
 const multer_1 = require("multer");
+const dossier_entity_1 = require("./entities/dossier.entity");
 let DossierController = class DossierController {
     constructor(dossierService) {
         this.dossierService = dossierService;
@@ -55,17 +55,44 @@ let DossierController = class DossierController {
         const payload = await this.dossierService.getStatistic();
         return res.status(common_1.HttpStatus.CREATED).json(payload);
     }
-    findOne(id) {
-        return this.dossierService.findOne(id);
+    async findOne(response, id) {
+        try {
+            const existingStudent = await this.dossierService.findOne(id);
+            return response.status(common_1.HttpStatus.OK).json({
+                message: 'Folder found successfully', existingStudent,
+            });
+        }
+        catch (err) {
+            return response.status(err.status).json(err.response);
+        }
     }
     findDossier(number) {
         return this.dossierService.findDossierNumber(number);
     }
-    async update(id, updateDossierDto) {
-        return await this.dossierService.update(id, updateDossierDto);
+    async update(response, id, updateDossierDto) {
+        try {
+            const existingStudent = await this.dossierService.update(id, updateDossierDto);
+            console.log(existingStudent);
+            return response.status(common_1.HttpStatus.OK).json({
+                message: 'Folder has been successfully updated',
+                existingStudent,
+            });
+        }
+        catch (err) {
+            return response.status(err.status).json(err.response);
+        }
     }
-    remove(id) {
-        return this.dossierService.remove(+id);
+    async remove(response, id) {
+        try {
+            const deletedStudent = await this.dossierService.remove(id);
+            return response.status(common_1.HttpStatus.OK).json({
+                message: 'Folder deleted successfully',
+                deletedStudent,
+            });
+        }
+        catch (err) {
+            return response.status(err.status).json(err.response);
+        }
     }
 };
 __decorate([
@@ -107,10 +134,11 @@ __decorate([
 ], DossierController.prototype, "getStatistic", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Res)()),
+    __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
 ], DossierController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Get)('number/:number'),
@@ -121,25 +149,24 @@ __decorate([
 ], DossierController.prototype, "findDossier", null);
 __decorate([
     (0, common_1.Put)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
+    __param(0, (0, common_1.Res)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_dossier_dto_1.UpdateDossierDto]),
+    __metadata("design:paramtypes", [Object, String, dossier_entity_1.Dossier]),
     __metadata("design:returntype", Promise)
 ], DossierController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Res)()),
+    __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
 ], DossierController.prototype, "remove", null);
 DossierController = __decorate([
     (0, common_1.Controller)('api/dossier'),
     __metadata("design:paramtypes", [dossier_service_1.DossierService])
 ], DossierController);
 exports.DossierController = DossierController;
-function getRndInteger(arg0, arg1) {
-    throw new Error('Function not implemented.');
-}
 //# sourceMappingURL=dossier.controller.js.map

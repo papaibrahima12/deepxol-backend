@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable prefer-const */
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdateDossierDto } from './dto/update-dossier.dto';
 import { DossierDocument } from './types';
+import {Dossier} from "./entities/dossier.entity";
 
 @Injectable()
 export class DossierService {
@@ -20,8 +21,13 @@ export class DossierService {
       newDossier.isActive = true;
       return await newDossier.save();
   }
-  async update(id: string, updateDossierDto: UpdateDossierDto):Promise<DossierDocument> {
-    return this.dossierModel.findByIdAndUpdate(id,updateDossierDto)
+  async update(id: string, updateDossierDto: Dossier):Promise<DossierDocument> {
+    const existingStudent = await this.dossierModel.findByIdAndUpdate(id, updateDossierDto, { new: true });
+    console.log(existingStudent);
+    if (!existingStudent) {
+      throw new NotFoundException(`Student #${id} not found`);
+    }
+    return existingStudent;
   }
 
   async findAll(): Promise<DossierDocument[]> {
@@ -38,15 +44,23 @@ export class DossierService {
       return { total: total, fibrillation: countFibrillation, notFibrillation: countNotFibrillation }
   }
 
-  async findOne(id: string) {
-    return this.dossierModel.findOne({_id: id});
+  async findOne(id: string) :Promise<DossierDocument> {
+    const existingStudent = await this.dossierModel.findById(id).exec();
+    if (!existingStudent) {
+      throw new NotFoundException(`Student #${id} not found`);
+    }
+    return existingStudent;
   }
 
   async findDossierNumber(number: string) {
     return this.dossierModel.findOne({dossierNumber: number});
   }
 
-  remove(id: number) {
-    return this.dossierModel.findByIdAndRemove(id);
+ async remove(id: string):Promise<DossierDocument> {
+    const deletedStudent = this.dossierModel.findByIdAndRemove(id);
+   if (!deletedStudent) {
+     throw new NotFoundException(`Student #${id} not found`);
+   }
+   return deletedStudent;
   }
 }

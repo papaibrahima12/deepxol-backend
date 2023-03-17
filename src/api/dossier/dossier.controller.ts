@@ -21,11 +21,6 @@ import {Dossier} from "./entities/dossier.entity";
 export class DossierController {
 
   constructor(private readonly dossierService: DossierService) {}
-    //     const today = new Date();
-    //     const random = Math.floor(Math.random() * (99999 - 0) ) + 0;
-    //     const year = today.getFullYear();
-    //     let dossierNumber = 'D-'+year+'-'+random
-
   @Post()
   @UseInterceptors(FileInterceptor('electro', {
     storage: diskStorage({
@@ -78,8 +73,15 @@ export class DossierController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dossierService.findOne(id);
+  async findOne(@Res() response, @Param('id') id: string) {
+    try {
+      const existingStudent = await this.dossierService.findOne(id);
+      return response.status(HttpStatus.OK).json({
+        message: 'Folder found successfully', existingStudent,
+      });
+    } catch (err) {
+      return response.status(err.status).json(err.response);
+    }
   }
 
   @Get('number/:number')
@@ -88,16 +90,27 @@ export class DossierController {
   }
 
   @Put(':id')
-  async update(@Param('id') id:string, @Body() dossier: Dossier) {
-    return await this.dossierService.update(id,dossier);
+  async update(@Res() response, @Param('id') id:string, @Body() updateDossierDto: Dossier) {
+    try {
+      const existingStudent = await this.dossierService.update(id, updateDossierDto);
+      console.log(existingStudent);
+      return response.status(HttpStatus.OK).json({
+        message: 'Folder has been successfully updated',
+        existingStudent,});
+    } catch (err) {
+      return response.status(err.status).json(err.response);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dossierService.remove(+id);
+  async remove(@Res() response,@Param('id') id: string) {
+    try {
+      const deletedStudent = await this.dossierService.remove(id);
+      return response.status(HttpStatus.OK).json({
+        message: 'Folder deleted successfully',
+        deletedStudent,});
+    }catch (err){
+      return response.status(err.status).json(err.response);
+    }
   }
 }
-function getRndInteger(arg0: number, arg1: number) {
-  throw new Error('Function not implemented.');
-}
-
